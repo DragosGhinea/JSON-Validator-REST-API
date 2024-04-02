@@ -1,3 +1,4 @@
 .env
+dev.db
 node_modules
 dist-server

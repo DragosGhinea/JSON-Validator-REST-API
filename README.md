@@ -7,3 +7,8 @@ ES6 and Jest added by following: https://www.freecodecamp.org/news/how-to-enable
 Unlike the tutorial above, [cross-env](https://github.com/kentcdodds/cross-env) is used for a platform agnostic solution.
 
 
+## Prisma
+
+The following command is used to update the database:
+
+`npx prisma db push --schema server/prisma/schema.prisma`
