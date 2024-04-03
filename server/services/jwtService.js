@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../prisma/prisma";
 
 const JWT_SECRET = "your_secret_key";
-const JWT_ACCESS_TOKEN_EXPIRATION = "15m";
+const JWT_ACCESS_TOKEN_EXPIRATION = "1h";
 const JWT_REFRESH_TOKEN_EXPIRATION = "7d";
 
 export const generateRefreshToken = (userId) => {

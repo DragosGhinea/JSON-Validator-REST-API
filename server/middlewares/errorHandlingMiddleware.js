@@ -26,7 +26,7 @@ function errorHandler(err, req, res, next) {
     timestamp,
     status,
     error,
-    message: referenceId || message,
+    message: `Reference ID: ${referenceId}` || message,
     path,
   });
 }

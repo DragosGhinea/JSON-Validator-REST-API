@@ -1,5 +1,9 @@
 import Router from "express-promise-router";
-import { findUserById, updateUserById } from "../../services/userService";
+import {
+  findUserById,
+  updateUserById,
+  deleteUserById,
+} from "../../services/userService";
 
 const usersRouter = Router();
 
@@ -15,13 +19,13 @@ usersRouter.get("/me", async (req, res) => {
 usersRouter.get("/:id", async (req, res) => {
   const { id } = req.params;
 
-  const user = findUserById(id);
+  const user = await findUserById(id);
 
   if (!user) {
     return res.status(404).json({ error: "User not found." });
   }
 
-  res.json(user);
+  res.json({ ...user, password: undefined });
 });
 
 usersRouter.delete("/:id", async (req, res) => {
@@ -34,7 +38,7 @@ usersRouter.delete("/:id", async (req, res) => {
 
 usersRouter.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { userDto } = req.body;
+  const { user: userDto } = req.body;
 
   const user = await updateUserById(id, userDto);
 
