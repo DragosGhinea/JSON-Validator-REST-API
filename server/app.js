@@ -12,6 +12,7 @@ import "dotenv/config";
 import authRouter from "./routes/v1/auth";
 import usersRouter from "./routes/v1/users";
 import jsonSchemasRouter from "./routes/v1/jsonSchemas";
+import oauth2Router from "./routes/v1/oauth2";
 
 const swaggerOptions = {
   definition: {
@@ -41,6 +42,7 @@ app.use(injectUserMiddleware);
 app.use("/v1/auth/", authRouter);
 app.use("/v1/users/", usersRouter);
 app.use("/v1/schemas/", jsonSchemasRouter);
+app.use("/v1/oauth2/", oauth2Router);
 
 app.use(function (req, res, next) {
   next(createError(404));
