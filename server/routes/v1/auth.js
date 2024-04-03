@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import {
   generateTokens,
   deleteRefreshTokenByUserId,
-  decodeToken,
   newAccessToken,
 } from "../../services/jwtService";
 import {
@@ -59,10 +58,8 @@ authRouter.post("/refresh-token", async (req, res) => {
 });
 
 authRouter.post("/logout", async (req, res) => {
-  const { accessToken } = req.body;
-
-  const { userId } = decodeToken(accessToken);
-  await deleteRefreshTokenByUserId(userId);
+  const {id} = req.user;
+  await deleteRefreshTokenByUserId(id);
 
   res.json({ message: "Logged out successfully." });
 });

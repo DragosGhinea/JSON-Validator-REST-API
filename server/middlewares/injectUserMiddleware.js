@@ -14,7 +14,7 @@ async function injectUserMiddleware(req, res, next) {
     return res.status(401).json({ message: "Access token missing" });
   }
 
-  if (!isAccessTokenValid(token)) {
+  if (!(await isAccessTokenValid(token))) {
     return res.status(401).json({ message: "Invalid access token" });
   }
 

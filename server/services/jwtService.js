@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import prisma from "../prisma/prisma";
+import process from "process";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_ACCESS_TOKEN_EXPIRATION = "1h";
@@ -90,7 +91,7 @@ export const newAccessToken = async (refreshToken) => {
   const accessToken = generateAccessToken(decodedToken.sub);
 
   await prisma.refreshToken.update({
-    where: { userId },
+    where: { userId: decodedToken.sub },
     data: { lastRefreshed: new Date() },
   });
 

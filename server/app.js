@@ -11,6 +11,7 @@ import "dotenv/config";
 
 import authRouter from "./routes/v1/auth";
 import usersRouter from "./routes/v1/users";
+import jsonSchemasRouter from "./routes/v1/jsonSchemas";
 
 const swaggerOptions = {
   definition: {
@@ -32,12 +33,14 @@ app.use(logger("combined"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+// eslint-disable-next-line no-undef
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.use(injectUserMiddleware);
 
 app.use("/v1/auth/", authRouter);
 app.use("/v1/users/", usersRouter);
+app.use("/v1/schemas/", jsonSchemasRouter);
 
 app.use(function (req, res, next) {
   next(createError(404));
@@ -45,4 +48,5 @@ app.use(function (req, res, next) {
 
 app.use(errorHandlerMiddleware);
 
-module.exports = app;
+// module.exports = app;
+export default app;
