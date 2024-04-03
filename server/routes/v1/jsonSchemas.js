@@ -7,6 +7,7 @@ import {
   getSchemasPaginated,
 } from "../../services/schemaStorageService";
 import { findUserByUsername } from "../../services/userService";
+import { validateSchema } from "../../services/schemaValidationService";
 
 const jsonSchemasRouter = Router();
 
@@ -22,7 +23,7 @@ jsonSchemasRouter.post("/:username/:name/validate", async (req, res) => {
 
   const parsedSchema = JSON.parse(schema.schema);
 
-  res.json({ valid: "To be done" });
+  res.json(validateSchema(parsedSchema, jsonToValidate));
 });
 
 jsonSchemasRouter.get("/:username/:name", async (req, res) => {
