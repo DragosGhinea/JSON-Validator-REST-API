@@ -1,5 +1,3 @@
-// authRouter.js
-
 import Router from "express-promise-router";
 import bcrypt from "bcrypt";
 import {
@@ -10,7 +8,6 @@ import {
 } from "../../services/jwtService";
 import {
   findUserByEmail,
-  createUser,
   registerUser,
 } from "../../services/userService";
 
