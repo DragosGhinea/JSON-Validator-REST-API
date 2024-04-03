@@ -1,19 +1,21 @@
 import jwt from "jsonwebtoken";
 import prisma from "../prisma/prisma";
 
-const JWT_SECRET = "your_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_ACCESS_TOKEN_EXPIRATION = "1h";
 const JWT_REFRESH_TOKEN_EXPIRATION = "7d";
 
 export const generateRefreshToken = (userId) => {
-  return jwt.sign({ userId }, JWT_SECRET, {
+  return jwt.sign({}, JWT_SECRET, {
     expiresIn: JWT_REFRESH_TOKEN_EXPIRATION,
+    subject: userId,
   });
 };
 
 export const generateAccessToken = (userId) => {
-  return jwt.sign({ userId }, JWT_SECRET, {
+  return jwt.sign({}, JWT_SECRET, {
     expiresIn: JWT_ACCESS_TOKEN_EXPIRATION,
+    subject: userId,
   });
 };
 
@@ -32,6 +34,24 @@ export const decodeToken = (token) => {
   } catch (error) {
     return null;
   }
+};
+
+export const isAccessTokenValid = async (accessToken) => {
+  const decodedToken = decodeToken(accessToken);
+  if (!decodedToken) {
+    return false;
+  }
+
+  const refreshToken = await fetchRefreshToken(decodedToken.sub);
+  if (!refreshToken) {
+    return false;
+  }
+
+  if (refreshToken.lastRefreshed > decodedToken.iat * 1000) {
+    return false;
+  }
+
+  return true;
 };
 
 export const fetchRefreshToken = async (userId) => {
@@ -59,7 +79,7 @@ export const newAccessToken = async (refreshToken) => {
     return null;
   }
 
-  const existingRefreshToken = await fetchRefreshToken(decodedToken.userId);
+  const existingRefreshToken = await fetchRefreshToken(decodedToken.sub);
   if (
     !existingRefreshToken ||
     existingRefreshToken.refreshToken !== refreshToken
@@ -67,9 +87,7 @@ export const newAccessToken = async (refreshToken) => {
     return null;
   }
 
-  const accessToken = jwt.sign({ userId: decodedToken.userId }, JWT_SECRET, {
-    expiresIn: JWT_ACCESS_TOKEN_EXPIRATION,
-  });
+  const accessToken = generateAccessToken(decodedToken.sub);
 
   await prisma.refreshToken.update({
     where: { userId },

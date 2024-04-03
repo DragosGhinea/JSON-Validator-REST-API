@@ -3,7 +3,8 @@ import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import errorHandler from "./middlewares/errorHandlingMiddleware";
+import errorHandlerMiddleware from "./middlewares/errorHandlingMiddleware";
+import injectUserMiddleware from "./middlewares/injectUserMiddleware";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 import "dotenv/config";
@@ -33,6 +34,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../public")));
 
+app.use(injectUserMiddleware);
+
 app.use("/v1/auth/", authRouter);
 app.use("/v1/users/", usersRouter);
 
@@ -40,6 +43,6 @@ app.use(function (req, res, next) {
   next(createError(404));
 });
 
-app.use(errorHandler);
+app.use(errorHandlerMiddleware);
 
 module.exports = app;
