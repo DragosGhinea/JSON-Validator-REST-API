@@ -5,10 +5,7 @@ import {
   deleteRefreshTokenByUserId,
   newAccessToken,
 } from "../../services/jwtService";
-import {
-  findUserByEmail,
-  registerUser,
-} from "../../services/userService";
+import { findUserByEmail, registerUser } from "../../services/userService";
 
 const authRouter = Router();
 
@@ -58,10 +55,14 @@ authRouter.post("/refresh-token", async (req, res) => {
 });
 
 authRouter.post("/logout", async (req, res) => {
-  const {id} = req.user;
+  if (!req.user) {
+    return res.status(401).json({ error: "Unauthorized." });
+  }
+
+  const { id } = req.user;
   await deleteRefreshTokenByUserId(id);
 
-  res.json({ message: "Logged out successfully." });
+  res.status(200).json({ message: "Logged out successfully." });
 });
 
 export default authRouter;

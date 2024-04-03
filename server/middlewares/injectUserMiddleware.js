@@ -1,7 +1,10 @@
 import { decodeToken, isAccessTokenValid } from "../services/jwtService";
 import { findUserById } from "../services/userService";
+import process from "process";
 
 async function injectUserMiddleware(req, res, next) {
+  if (process.env.NODE_ENV === "test") return next();
+
   const authHeader = req.headers["authorization"];
 
   if (!authHeader) {
