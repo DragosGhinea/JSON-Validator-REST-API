@@ -45,7 +45,7 @@ Prisma with SQLite is used for this project.
 
 A minimalistic relational database for our use case:
 
-![DatabaseDiagram.svg]("https://github.com/DragosGhinea/JSON-Validator-REST-API/blob/main/docs/DatabaseDiagram.svg")
+![DatabaseDiagram](https://github.com/DragosGhinea/JSON-Validator-REST-API/blob/main/docs/DatabaseDiagram.svg)
 
 As seen in the diagram above, a user can have multiple json schemas but only one refresh token at a time. The `lastRefreshed` field also ensures that there is only one access token per refresh token, since at each refresh the old access token is invalidated.
 
@@ -55,5 +55,5 @@ In the flow charts below I am refferring to a user (not necessarly logged in) th
 
 A `producer` and a `consumer` are not mutually exclusive. A user may be both.
 
-![Validate.svg]("https://github.com/DragosGhinea/JSON-Validator-REST-API/blob/main/docs/RestAPI_Validate.svg")
-![CreateSchema.svg]("https://github.com/DragosGhinea/JSON-Validator-REST-API/blob/main/docs/RestAPI_CreateSchema.svg")
+![Validate](https://github.com/DragosGhinea/JSON-Validator-REST-API/blob/main/docs/RestAPI_Validate.svg)
+![CreateSchema](https://github.com/DragosGhinea/JSON-Validator-REST-API/blob/main/docs/RestAPI_CreateSchema.svg)
