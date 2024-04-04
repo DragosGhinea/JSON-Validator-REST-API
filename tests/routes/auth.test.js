@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../server/app"; // Import your Express app
+import app from "../../server/app";
 import { describe, it, expect, jest } from "@jest/globals";
 
 import {
