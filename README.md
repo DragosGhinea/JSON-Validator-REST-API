@@ -26,10 +26,10 @@ The `OAUTH_DISCORD_CLIENT_ID` and `OAUTH_DISCORD_CLIENT_SECRET` variables are ne
 
 ## Running the application
 
-`npm run test` - Run jest tests
-`npm run watch:dev` - Run nodemon instance over a development run
-`npm run dev` - Run dev mode normally
-`npm run build` - Build the application in the dist-server folder
+- `npm run test` - Run jest tests
+- `npm run watch:dev` - Run nodemon instance over a development run
+- `npm run dev` - Run dev mode normally
+- `npm run build` - Build the application in the dist-server folder
 
 # Database
 
@@ -45,7 +45,7 @@ Prisma with SQLite is used for this project.
 
 A minimalistic relational database for our use case:
 
-[DatabaseDiagram.svg]("https://github.com/DragosGhinea/JSON-Validator-REST-API/blob/main/docs/DatabaseDiagram.svg")
+![DatabaseDiagram.svg]("https://github.com/DragosGhinea/JSON-Validator-REST-API/blob/main/docs/DatabaseDiagram.svg")
 
 As seen in the diagram above, a user can have multiple json schemas but only one refresh token at a time. The `lastRefreshed` field also ensures that there is only one access token per refresh token, since at each refresh the old access token is invalidated.
 
@@ -55,5 +55,5 @@ In the flow charts below I am refferring to a user (not necessarly logged in) th
 
 A `producer` and a `consumer` are not mutually exclusive. A user may be both.
 
-[Validate.svg]("https://github.com/DragosGhinea/JSON-Validator-REST-API/blob/main/docs/RestAPI_Validate.svg")
-[CreateSchema.svg]("https://github.com/DragosGhinea/JSON-Validator-REST-API/blob/main/docs/RestAPI_CreateSchema.svg")
+![Validate.svg]("https://github.com/DragosGhinea/JSON-Validator-REST-API/blob/main/docs/RestAPI_Validate.svg")
+![CreateSchema.svg]("https://github.com/DragosGhinea/JSON-Validator-REST-API/blob/main/docs/RestAPI_CreateSchema.svg")
