@@ -6,16 +6,7 @@
       "use": "@vercel/node"
     }
   ],
-  "hooks": {
-    "build": {
-      "before": {
-        "npm": {
-          "ci": false,
-          "arguments": ["run", "build"]
-        }
-      }
-    }
-  },
+  "buildCommand": "npm run build",
   "routes": [
     {
       "src": "/(.*)",
