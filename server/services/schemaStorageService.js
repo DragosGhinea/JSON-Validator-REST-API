@@ -11,7 +11,7 @@ export const createSchema = async (userId, name, jsonSchema) => {
 };
 
 export const updateSchema = async (userId, name, jsonSchema) => {
-    console.log(userId, name)
+  console.log(userId, name);
   return await prisma.jSONSchema.update({
     where: {
       userId_name: {
@@ -37,12 +37,18 @@ export const findSchemaByUsernameAndName = async (username, name) => {
 };
 
 export const deleteSchemaByUsernameAndName = async (username, name) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+  });
+
   return await prisma.jSONSchema.delete({
     where: {
-      user: {
-        username,
+      userId_name: {
+        userId: user.id,
+        name,
       },
-      name,
     },
   });
 };

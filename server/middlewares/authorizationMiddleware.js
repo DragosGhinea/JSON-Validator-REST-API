@@ -10,16 +10,19 @@ function authorizationMiddleware(reqResEvaluator) {
 }
 
 export const sameUserAuthorization =
-  (userFieldToUseSupplier, userFieldSupplier) => (req, res) => {
+  (userFieldToUseSupplier, userFieldSupplier) => (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({ message: "You must be logged in." });
     }
 
-    if (userFieldToUseSupplier !== userFieldSupplier(req)) {
+    // console.log(userFieldToUseSupplier(req.user), userFieldSupplier(req));
+    if (userFieldToUseSupplier(req.user) !== userFieldSupplier(req)) {
       return res
         .status(403)
         .json({ message: "You are not the user that owns this resource." });
     }
+
+    next();
   };
 
 export default authorizationMiddleware;

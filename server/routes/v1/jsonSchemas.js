@@ -166,11 +166,15 @@ jsonSchemasRouter.get(
   validateParamsMiddleware(createUpdateSchemaParams),
   sameUserAuthorization(
     (user) => user.username,
-    (req) => req.username
+    (req) => req.params.username
   ),
   async (req, res) => {
     const { username, name } = req.params;
     const schema = await findSchemaByUsernameAndName(username, name);
+    if (!schema) {
+      return res.status(404).json({ error: "Schema not found." });
+    }
+
     res.status(200).json(schema);
   }
 );
@@ -215,7 +219,7 @@ jsonSchemasRouter.post(
   validateBodyMiddleware(createUpdateSchemaBody),
   sameUserAuthorization(
     (user) => user.username,
-    (req) => req.username
+    (req) => req.params.username
   ),
   async (req, res) => {
     const { username, name } = req.params;
@@ -273,7 +277,7 @@ jsonSchemasRouter.put(
   validateBodyMiddleware(createUpdateSchemaBody),
   sameUserAuthorization(
     (user) => user.username,
-    (req) => req.username
+    (req) => req.params.username
   ),
   async (req, res) => {
     const { username, name } = req.params;
@@ -326,7 +330,7 @@ jsonSchemasRouter.delete(
   validateParamsMiddleware(createUpdateSchemaParams),
   sameUserAuthorization(
     (user) => user.username,
-    (req) => req.username
+    (req) => req.params.username
   ),
   async (req, res) => {
     const { username, name } = req.params;
@@ -363,7 +367,7 @@ jsonSchemasRouter.get(
   validateQueryMiddleware(getSchemasQuery),
   sameUserAuthorization(
     (user) => user.username,
-    (req) => req.username
+    (req) => req.params.username
   ),
   async (req, res) => {
     const { username } = req.params;

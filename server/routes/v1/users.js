@@ -191,13 +191,13 @@ usersRouter.put(
     const { id } = req.params;
     const { user: userDto } = req.body;
 
-    const user = await updateUserById(id, userDto);
+    const user = await updateUserById(id, { ...userDto, password: undefined });
 
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
 
-    res.json(user);
+    res.json({ ...user, password: undefined });
   }
 );
 
