@@ -1,3 +1,38 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The unique identifier of the user.
+ *         username:
+ *           type: string
+ *           description: The username of the user.
+ *       required:
+ *         - id
+ *         - username
+ *
+ *     UserUpdate:
+ *       type: object
+ *       properties:
+ *         user:
+ *           $ref: '#/components/schemas/User'
+ *       required:
+ *         - user
+ *
+ *     UsernameChange:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *           description: The new username for the user.
+ *       required:
+ *         - username
+ */
+
 import Router from "express-promise-router";
 import {
   findUserById,
@@ -16,6 +51,21 @@ import {
 
 const usersRouter = Router();
 
+/**
+ * @swagger
+ * /v1/users/me:
+ *   get:
+ *     summary: Get the currently authenticated user.
+ *     tags:
+ *       - Users
+ *     responses:
+ *       '200':
+ *         description: User details retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
 usersRouter.get("/me", async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: "Unauthorized." });
@@ -25,6 +75,30 @@ usersRouter.get("/me", async (req, res) => {
   res.json(user);
 });
 
+/**
+ * @swagger
+ * /v1/users/{id}:
+ *   get:
+ *     summary: Get user by ID.
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User ID
+ *     responses:
+ *       '200':
+ *         description: User found successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       '404':
+ *         description: User not found.
+ */
 usersRouter.get(
   "/:id",
   validateParamsMiddleware(idParamSchema),
@@ -41,6 +115,32 @@ usersRouter.get(
   }
 );
 
+/**
+ * @swagger
+ * /v1/users/{id}:
+ *   delete:
+ *     summary: Delete user by ID.
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User ID
+ *     responses:
+ *       '200':
+ *         description: User deleted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Deletion success message.
+ */
 usersRouter.delete(
   "/:id",
   validateParamsMiddleware(idParamSchema),
@@ -53,6 +153,36 @@ usersRouter.delete(
   }
 );
 
+/**
+ * @swagger
+ * /v1/users/{id}:
+ *   put:
+ *     summary: Update user by ID.
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserUpdate'
+ *     responses:
+ *       '200':
+ *         description: User updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       '404':
+ *         description: User not found.
+ */
 usersRouter.put(
   "/:id",
   validateParamsMiddleware(idParamSchema),
@@ -71,6 +201,27 @@ usersRouter.put(
   }
 );
 
+/**
+ * @swagger
+ * /v1/users/change/username:
+ *   patch:
+ *     summary: Change username.
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UsernameChange'
+ *     responses:
+ *       '200':
+ *         description: Username changed successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
 usersRouter.patch(
   "/change/username",
   validateBodyMiddleware(usernameChangeSchema),

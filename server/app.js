@@ -22,7 +22,7 @@ const swaggerOptions = {
       version: "0.0.1",
     },
   },
-  apis: ["./server/routes*.js"],
+  apis: ["./dist-server/routes/v1/*.js"],
 };
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 

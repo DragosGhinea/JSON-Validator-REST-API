@@ -1,3 +1,53 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     JsonSchema:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The unique identifier of the schema.
+ *         name:
+ *           type: string
+ *           description: The name of the schema.
+ *         schema:
+ *           type: string
+ *           description: The JSON schema definition.
+ *       required:
+ *         - id
+ *         - name
+ *         - schema
+ *
+ *     JsonSchemaValidationResponse:
+ *       type: object
+ *       properties:
+ *         valid:
+ *           type: boolean
+ *           description: Indicates whether the JSON validates against the schema.
+ *       required:
+ *         - valid
+ *
+ *     JsonSchemaPaginatedResponse:
+ *       type: object
+ *       properties:
+ *         schemas:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/JsonSchema'
+ *           description: List of JSON schemas.
+ *         limit:
+ *           type: integer
+ *           description: Number of schemas per page.
+ *         offset:
+ *           type: integer
+ *           description: Offset for pagination.
+ *       required:
+ *         - schemas
+ *         - limit
+ *         - offset
+ */
+
 import Router from "express-promise-router";
 import {
   findSchemaByUsernameAndName,
@@ -25,6 +75,42 @@ import {
 
 const jsonSchemasRouter = Router();
 
+/**
+ * @swagger
+ * /v1/schemas/{username}/{name}/validate:
+ *   post:
+ *     summary: Validate JSON against schema.
+ *     tags:
+ *       - JSON Schemas
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User's username
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Schema name
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/JsonSchemaValidationResponse'
+ *     responses:
+ *       '200':
+ *         description: Validation result.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/JsonSchemaValidationResponse'
+ *       '404':
+ *         description: Schema not found.
+ */
 jsonSchemasRouter.post(
   "/:username/:name/validate",
   validateParamsMiddleware(validateSchemaParams),
@@ -45,6 +131,36 @@ jsonSchemasRouter.post(
   }
 );
 
+/**
+ * @swagger
+ * /v1/schemas/{username}/{name}:
+ *   get:
+ *     summary: Get JSON schema by username and name.
+ *     tags:
+ *       - JSON Schemas
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User's username
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Schema name
+ *     responses:
+ *       '200':
+ *         description: Schema found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/JsonSchema'
+ *       '404':
+ *         description: Schema not found.
+ */
 jsonSchemasRouter.get(
   "/:username/:name",
   validateParamsMiddleware(createUpdateSchemaParams),
@@ -59,6 +175,40 @@ jsonSchemasRouter.get(
   }
 );
 
+/**
+ * @swagger
+ * /v1/schemas/{username}/{name}:
+ *   post:
+ *     summary: Create JSON schema.
+ *     tags:
+ *       - JSON Schemas
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User's username
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Schema name
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/JsonSchema'
+ *     responses:
+ *       '200':
+ *         description: Schema created.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/JsonSchema'
+ */
 jsonSchemasRouter.post(
   "/:username/:name",
   validateParamsMiddleware(createUpdateSchemaParams),
@@ -81,6 +231,42 @@ jsonSchemasRouter.post(
   }
 );
 
+/**
+ * @swagger
+ * /v1/schemas/{username}/{name}:
+ *   put:
+ *     summary: Update JSON schema.
+ *     tags:
+ *       - JSON Schemas
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User's username
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Schema name
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/JsonSchema'
+ *     responses:
+ *       '200':
+ *         description: Schema updated.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/JsonSchema'
+ *       '404':
+ *         description: Schema not found.
+ */
 jsonSchemasRouter.put(
   "/:username/:name",
   validateParamsMiddleware(createUpdateSchemaParams),
@@ -103,6 +289,38 @@ jsonSchemasRouter.put(
   }
 );
 
+/**
+ * @swagger
+ * /v1/schemas/{username}/{name}:
+ *   delete:
+ *     summary: Delete JSON schema.
+ *     tags:
+ *       - JSON Schemas
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User's username
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Schema name
+ *     responses:
+ *       '200':
+ *         description: Schema deleted.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Deletion success message.
+ */
 jsonSchemasRouter.delete(
   "/:username/:name",
   validateParamsMiddleware(createUpdateSchemaParams),
@@ -117,6 +335,28 @@ jsonSchemasRouter.delete(
   }
 );
 
+/**
+ * @swagger
+ * /v1/schemas/{username}:
+ *   get:
+ *     summary: Get JSON schemas by username.
+ *     tags:
+ *       - JSON Schemas
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User's username
+ *     responses:
+ *       '200':
+ *         description: Schemas found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/JsonSchemaPaginatedResponse'
+ */
 jsonSchemasRouter.get(
   "/:username",
   validateParamsMiddleware(getSchemasParams),
