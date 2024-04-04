@@ -48,7 +48,8 @@ export const isAccessTokenValid = async (accessToken) => {
     return false;
   }
 
-  if (refreshToken.lastRefreshed > decodedToken.iat * 1000) {
+  const refreshInSeconds = Math.floor(refreshToken.lastRefreshed / 1000);
+  if (refreshInSeconds > decodedToken.iat) {
     return false;
   }
 
