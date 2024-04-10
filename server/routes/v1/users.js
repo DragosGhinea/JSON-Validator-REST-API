@@ -229,8 +229,8 @@ usersRouter.patch(
     const { username } = req.body;
 
     const user = await updateUserById(req.user.id, { username });
-
-    res.json(user);
+    
+    res.json({...user, password: undefined});
   }
 );
 
